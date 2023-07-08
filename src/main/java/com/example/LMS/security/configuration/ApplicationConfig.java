@@ -1,4 +1,4 @@
-package com.example.LMS.configuration;
+package com.example.LMS.security.configuration;
 
 import com.example.LMS.repository.UserRepository;
 import org.springframework.context.annotation.Bean;

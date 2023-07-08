@@ -1,4 +1,4 @@
-package com.example.LMS.dto;
+package com.example.LMS.security.dto;
 
 public class RegRequestDto {
 

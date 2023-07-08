@@ -1,9 +1,9 @@
 package com.example.LMS.controller;
 
-import com.example.LMS.dto.AuthorCreateRequestDto;
-import com.example.LMS.dto.AuthorCreateResponseDto;
-import com.example.LMS.dto.AuthorResponseDto;
-import com.example.LMS.dto.AuthorUnitResponseDto;
+import com.example.LMS.dto.author.AuthorCreateRequestDto;
+import com.example.LMS.dto.author.AuthorCreateResponseDto;
+import com.example.LMS.dto.author.AuthorResponseDto;
+import com.example.LMS.dto.author.AuthorUnitResponseDto;
 import com.example.LMS.service.AuthorService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;

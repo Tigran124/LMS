@@ -1,11 +1,11 @@
-package com.example.LMS.service;
+package com.example.LMS.security.service;
 
-import com.example.LMS.dto.AuthRequestDto;
-import com.example.LMS.dto.AuthResponseDto;
-import com.example.LMS.dto.RegRequestDto;
 import com.example.LMS.entity.Role;
 import com.example.LMS.entity.User;
 import com.example.LMS.repository.UserRepository;
+import com.example.LMS.security.dto.AuthRequestDto;
+import com.example.LMS.security.dto.AuthResponseDto;
+import com.example.LMS.security.dto.RegRequestDto;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

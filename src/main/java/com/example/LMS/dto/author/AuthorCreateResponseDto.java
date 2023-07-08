@@ -1,4 +1,4 @@
-package com.example.LMS.dto;
+package com.example.LMS.dto.author;
 
 public class AuthorCreateResponseDto {
 

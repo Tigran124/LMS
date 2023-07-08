@@ -1,5 +1,6 @@
-package com.example.LMS.configuration;
+package com.example.LMS.security.configuration;
 
+import com.example.LMS.security.configuration.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;

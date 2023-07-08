@@ -1,4 +1,4 @@
-package com.example.LMS.dto;
+package com.example.LMS.dto.book;
 
 public class BookCreateResponseDto {
     private Long bookId;

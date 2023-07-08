@@ -1,6 +1,6 @@
-package com.example.LMS.configuration;
+package com.example.LMS.security.configuration;
 
-import com.example.LMS.service.JwtService;
+import com.example.LMS.security.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

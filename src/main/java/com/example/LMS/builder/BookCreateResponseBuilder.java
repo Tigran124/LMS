@@ -1,6 +1,6 @@
 package com.example.LMS.builder;
 
-import com.example.LMS.dto.BookCreateResponseDto;
+import com.example.LMS.dto.book.BookCreateResponseDto;
 import com.example.LMS.entity.Book;
 
 public final class BookCreateResponseBuilder {

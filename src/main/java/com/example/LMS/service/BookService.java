@@ -2,14 +2,13 @@ package com.example.LMS.service;
 
 import com.example.LMS.builder.BookCreateResponseBuilder;
 import com.example.LMS.builder.BookResponseBuilder;
-import com.example.LMS.dto.BookCreateRequestDto;
-import com.example.LMS.dto.BookCreateResponseDto;
-import com.example.LMS.dto.BookResponseDto;
+import com.example.LMS.dto.book.BookCreateRequestDto;
+import com.example.LMS.dto.book.BookCreateResponseDto;
+import com.example.LMS.dto.book.BookResponseDto;
 import com.example.LMS.entity.Author;
 import com.example.LMS.entity.Book;
 import com.example.LMS.repository.AuthorRepository;
 import com.example.LMS.repository.BookRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

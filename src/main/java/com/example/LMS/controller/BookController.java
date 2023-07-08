@@ -1,8 +1,8 @@
 package com.example.LMS.controller;
 
-import com.example.LMS.dto.BookCreateRequestDto;
-import com.example.LMS.dto.BookCreateResponseDto;
-import com.example.LMS.dto.BookResponseDto;
+import com.example.LMS.dto.book.BookCreateRequestDto;
+import com.example.LMS.dto.book.BookCreateResponseDto;
+import com.example.LMS.dto.book.BookResponseDto;
 import com.example.LMS.service.BookService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;

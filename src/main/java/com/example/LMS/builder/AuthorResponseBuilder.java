@@ -1,6 +1,6 @@
 package com.example.LMS.builder;
 
-import com.example.LMS.dto.AuthorResponseDto;
+import com.example.LMS.dto.author.AuthorResponseDto;
 import com.example.LMS.entity.Author;
 
 public final class AuthorResponseBuilder {

@@ -1,4 +1,4 @@
-package com.example.LMS.configuration;
+package com.example.LMS.security.configuration;
 
 
 import org.springframework.context.annotation.Configuration;

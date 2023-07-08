@@ -1,4 +1,6 @@
-package com.example.LMS.dto;
+package com.example.LMS.dto.author;
+
+import com.example.LMS.dto.book.BookResponseDto;
 
 import java.util.List;
 

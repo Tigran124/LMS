@@ -1,9 +1,9 @@
-package com.example.LMS.controller;
+package com.example.LMS.security.controller;
 
-import com.example.LMS.dto.AuthRequestDto;
-import com.example.LMS.dto.AuthResponseDto;
-import com.example.LMS.dto.RegRequestDto;
-import com.example.LMS.service.AuthService;
+import com.example.LMS.security.service.AuthService;
+import com.example.LMS.security.dto.AuthRequestDto;
+import com.example.LMS.security.dto.AuthResponseDto;
+import com.example.LMS.security.dto.RegRequestDto;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
