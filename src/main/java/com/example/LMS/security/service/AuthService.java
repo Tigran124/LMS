@@ -35,7 +35,7 @@ public class AuthService {
                         authRequestDto.getUsername(),
                         authRequestDto.getPassword()
                 ));
-        User user = (User) repository.findByUsername(authRequestDto.getUsername())
+        User user = repository.findByUsername(authRequestDto.getUsername())
                 .orElseThrow();
         String jwtToken = jwtService.generateToken(user);
         AuthResponseDto authResponseDto = new AuthResponseDto();

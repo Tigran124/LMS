@@ -27,6 +27,11 @@ public class Book {
         this.reviewList.add(review);
     }
 
+    public void setAuthor(Author author) {
+        this.author = author;
+        this.author.addBook(this);
+    }
+
     public List<BookCopy> getBookCopyList() {
         return bookCopyList;
     }
@@ -61,11 +66,6 @@ public class Book {
 
     public Author getAuthor() {
         return author;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
-        this.author.addBook(this);
     }
 
     public List<Review> getReviewList() {

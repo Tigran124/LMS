@@ -1,8 +1,9 @@
 package com.example.LMS.controller;
 
+import com.example.LMS.dto.review.ReviewCreateRequestDto;
+import com.example.LMS.dto.review.ReviewCreateResponseDto;
 import com.example.LMS.service.UserService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -12,5 +13,10 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @PostMapping("/review/create")
+    public ReviewCreateResponseDto createReview(@RequestBody ReviewCreateRequestDto requestDto){
+        return userService.createReview(requestDto);
     }
 }

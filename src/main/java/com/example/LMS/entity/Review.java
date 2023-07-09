@@ -10,12 +10,21 @@ public class Review {
     private long id;
     private Double rate;
     private String comment;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
+
+    public void setBook(Book book) {
+        this.book = book;
+        this.book.addReview(this);
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public long getId() {
         return id;
@@ -45,15 +54,7 @@ public class Review {
         return user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public Book getBook() {
         return book;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
     }
 }

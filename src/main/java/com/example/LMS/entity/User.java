@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Entity(name = "user_rep")
 public class User implements UserDetails {
@@ -25,9 +26,24 @@ public class User implements UserDetails {
     @OneToMany
     @Column(name = "fav_book_list")
     private List<Book> favBook;
+    @OneToMany
+    @Column(name = "review_map")
+    private Map<Long, Review> reviewMap;
 
     public void addFavBook(Book book){
         this.favBook.add(book);
+    }
+
+    public void addReview(Long key, Review review){
+        this.reviewMap.put(key, review);
+    }
+
+    public Map<Long, Review> getReviewMap() {
+        return reviewMap;
+    }
+
+    public void setReviewMap(Map<Long, Review> reviewMap) {
+        this.reviewMap = reviewMap;
     }
 
     public List<Book> getFavBook() {

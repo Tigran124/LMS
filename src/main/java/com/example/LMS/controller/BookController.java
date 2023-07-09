@@ -21,8 +21,8 @@ public class BookController {
 
     @PostMapping("/create")
     @Secured("ADMIN")
-    public BookCreateResponseDto createBook(@RequestBody BookCreateRequestDto bookCreateRequestDto){
-        return bookService.createBook(bookCreateRequestDto);
+    public BookCreateResponseDto createBook(@RequestBody BookCreateRequestDto requestDto){
+        return bookService.createBook(requestDto);
     }
 
     @GetMapping("/getAll")
