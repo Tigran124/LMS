@@ -2,9 +2,11 @@ package com.example.LMS.service;
 
 import com.example.LMS.builder.BookCreateResponseBuilder;
 import com.example.LMS.builder.BookResponseBuilder;
+import com.example.LMS.builder.ReviewResponseBuilder;
 import com.example.LMS.dto.book.BookCreateRequestDto;
 import com.example.LMS.dto.book.BookCreateResponseDto;
 import com.example.LMS.dto.book.BookResponseDto;
+import com.example.LMS.dto.review.ReviewResponseDto;
 import com.example.LMS.entity.Author;
 import com.example.LMS.entity.Book;
 import com.example.LMS.repository.AuthorRepository;
@@ -47,6 +49,18 @@ public class BookService {
         return bookRepository.findAll()
                 .stream()
                 .map(BookResponseBuilder::buildBookResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<ReviewResponseDto> getReviewByBookId(Long bookId){
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        if (optionalBook.isEmpty()){
+            throw new  RuntimeException();
+        }
+        return optionalBook.get()
+                .getReviewList()
+                .stream()
+                .map(ReviewResponseBuilder::buildReviewResponseDto)
                 .collect(Collectors.toList());
     }
 }

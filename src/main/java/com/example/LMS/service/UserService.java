@@ -42,12 +42,13 @@ public class  UserService {
         if (user.getReviewMap().containsKey(requestDto.getBookId())){
             Long reviewId = user.getReviewMap().
                     get(requestDto.getBookId()).getId();
-            Review review = reviewRepository.updateById(
+            reviewRepository.updateById(
                     requestDto.getComment(),
                     requestDto.getRate(),
                     reviewId);
-            user.addReview(requestDto.getBookId(), review);
-            return ReviewCreateResponseBuilder.buildReviewCreateResponseDto(review);
+            Review savedReview = reviewRepository.getReferenceById(reviewId);
+            user.addReview(requestDto.getBookId(), savedReview);
+            return ReviewCreateResponseBuilder.buildReviewCreateResponseDto(savedReview);
         }else {
             Review review = new Review();
             review.setUser(user);
