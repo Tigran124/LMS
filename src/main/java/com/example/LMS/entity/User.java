@@ -24,11 +24,18 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String email;
     @OneToMany
+    @Column(name = "ordered_book_list")
+    private List<BookCopy> orderedBook;
+    @OneToMany
     @Column(name = "fav_book_list")
     private List<Book> favBook;
     @OneToMany
     @Column(name = "review_map")
     private Map<Long, Review> reviewMap;
+
+    public void addBookCopy(BookCopy bookCopy){
+        this.orderedBook.add(bookCopy);
+    }
 
     public void addFavBook(Book book){
         this.favBook.add(book);

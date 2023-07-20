@@ -27,6 +27,10 @@ public class Book {
         this.reviewList.add(review);
     }
 
+    public void addBookCopy(BookCopy bookCopy){
+        this.bookCopyList.add(bookCopy);
+    }
+
     public void setAuthor(Author author) {
         this.author = author;
         this.author.addBook(this);

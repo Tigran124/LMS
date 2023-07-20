@@ -9,6 +9,7 @@ import com.example.LMS.dto.book.BookResponseDto;
 import com.example.LMS.dto.review.ReviewResponseDto;
 import com.example.LMS.entity.Author;
 import com.example.LMS.entity.Book;
+import com.example.LMS.entity.Review;
 import com.example.LMS.repository.AuthorRepository;
 import com.example.LMS.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,7 +50,8 @@ public class BookService {
     public List<BookResponseDto> getAllBooks(){
         return bookRepository.findAll()
                 .stream()
-                .map(BookResponseBuilder::buildBookResponseDto)
+                .map((Book book) -> BookResponseBuilder.buildBookResponseDto(book,
+                        calculateRate(book)))
                 .collect(Collectors.toList());
     }
 
@@ -62,5 +65,11 @@ public class BookService {
                 .stream()
                 .map(ReviewResponseBuilder::buildReviewResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    public OptionalDouble calculateRate(Book book){
+        return book.getReviewList().stream()
+                .mapToDouble(Review::getRate)
+                .average();
     }
 }

@@ -8,6 +8,7 @@ import com.example.LMS.dto.author.AuthorCreateResponseDto;
 import com.example.LMS.dto.author.AuthorResponseDto;
 import com.example.LMS.dto.author.AuthorUnitResponseDto;
 import com.example.LMS.entity.Author;
+import com.example.LMS.entity.Book;
 import com.example.LMS.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,9 +24,11 @@ import java.util.stream.Collectors;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final BookService bookService;
 
-    public AuthorService(AuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository, BookService bookService) {
         this.authorRepository = authorRepository;
+        this.bookService = bookService;
     }
 
     public AuthorCreateResponseDto createAuthor(AuthorCreateRequestDto requestDto){
@@ -54,7 +58,8 @@ public class AuthorService {
                 author.get()
                         .getBookList()
                         .stream()
-                        .map(BookResponseBuilder::buildBookResponseDto)
+                        .map((Book book) -> BookResponseBuilder.buildBookResponseDto(book, bookService
+                                .calculateRate(book)))
                         .collect(Collectors.toList())
         );
         return responseDto;
