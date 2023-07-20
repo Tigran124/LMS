@@ -1,11 +1,13 @@
 package com.example.LMS.service;
 
+import com.example.LMS.builder.BookCopyResponseBuilder;
 import com.example.LMS.builder.ReviewCreateResponseBuilder;
+import com.example.LMS.dto.bookCopy.BookCopyOrderRequestDto;
+import com.example.LMS.dto.bookCopy.BookCopyResponseDto;
 import com.example.LMS.dto.review.ReviewCreateRequestDto;
 import com.example.LMS.dto.review.ReviewCreateResponseDto;
-import com.example.LMS.entity.Book;
-import com.example.LMS.entity.Review;
-import com.example.LMS.entity.User;
+import com.example.LMS.entity.*;
+import com.example.LMS.repository.BookCopyRepository;
 import com.example.LMS.repository.BookRepository;
 import com.example.LMS.repository.ReviewRepository;
 import com.example.LMS.repository.UserRepository;
@@ -23,11 +25,13 @@ public class  UserService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final ReviewRepository reviewRepository;
+    private final BookCopyRepository bookCopyRepository;
 
-    public UserService(UserRepository userRepository, BookRepository bookRepository, ReviewRepository reviewRepository) {
+    public UserService(UserRepository userRepository, BookRepository bookRepository, ReviewRepository reviewRepository, BookCopyRepository bookCopyRepository) {
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
         this.reviewRepository = reviewRepository;
+        this.bookCopyRepository = bookCopyRepository;
     }
 
     public ReviewCreateResponseDto createReview(ReviewCreateRequestDto requestDto){
@@ -59,5 +63,24 @@ public class  UserService {
             user.addReview(optionalBook.get().getId(), savedReview);
             return ReviewCreateResponseBuilder.buildReviewCreateResponseDto(savedReview);
         }
+    }
+
+    public BookCopyResponseDto orderBookCopy(BookCopyOrderRequestDto requestDto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        Optional<User> optionalUser = userRepository.findByUsername(currentPrincipalName);
+        Optional<Book> optionalBook = bookRepository.findById(requestDto.getBookId());
+        Optional<BookCopy> optionalBookCopy = bookCopyRepository.findById(requestDto.getBookCopyId());
+        if (optionalUser.isEmpty() || optionalBook.isEmpty() || optionalBookCopy.isEmpty()){
+            throw new RuntimeException();
+        }
+        if (optionalBookCopy.get().getAvailability().equals(Availability.TAKEN)){
+            throw new RuntimeException();
+        }
+        bookCopyRepository.updateById(optionalUser.get(), requestDto.getBookCopyId());
+        optionalBookCopy.get().setUser(optionalUser.get());
+        optionalBookCopy.get().setAvailability(Availability.TAKEN);
+        BookCopy savedBookCopy = bookCopyRepository.getReferenceById(requestDto.getBookCopyId());
+        return BookCopyResponseBuilder.buildBookCopyResponseDto(savedBookCopy);
     }
 }

@@ -1,11 +1,10 @@
 package com.example.LMS.service;
 
-import com.example.LMS.builder.BookCreateResponseBuilder;
-import com.example.LMS.builder.BookResponseBuilder;
-import com.example.LMS.builder.ReviewResponseBuilder;
+import com.example.LMS.builder.*;
 import com.example.LMS.dto.book.BookCreateRequestDto;
 import com.example.LMS.dto.book.BookCreateResponseDto;
 import com.example.LMS.dto.book.BookResponseDto;
+import com.example.LMS.dto.bookCopy.BookCopyResponseDto;
 import com.example.LMS.dto.review.ReviewResponseDto;
 import com.example.LMS.entity.Author;
 import com.example.LMS.entity.Book;
@@ -64,6 +63,18 @@ public class BookService {
                 .getReviewList()
                 .stream()
                 .map(ReviewResponseBuilder::buildReviewResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<BookCopyResponseDto> getBookCopyByBookId(Long bookId){
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        if (optionalBook.isEmpty()){
+            throw new RuntimeException();
+        }
+        return optionalBook.get()
+                .getBookCopyList()
+                .stream()
+                .map(BookCopyResponseBuilder::buildBookCopyResponseDto)
                 .collect(Collectors.toList());
     }
 
