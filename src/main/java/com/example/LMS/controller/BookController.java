@@ -3,6 +3,7 @@ package com.example.LMS.controller;
 import com.example.LMS.dto.book.BookCreateRequestDto;
 import com.example.LMS.dto.book.BookCreateResponseDto;
 import com.example.LMS.dto.book.BookResponseDto;
+import com.example.LMS.dto.book.BookUnitResponseDto;
 import com.example.LMS.dto.bookCopy.BookCopyResponseDto;
 import com.example.LMS.dto.review.ReviewResponseDto;
 import com.example.LMS.service.BookService;
@@ -30,6 +31,11 @@ public class BookController {
     @GetMapping("/getAll")
     public List<BookResponseDto> getAllBooks(){
         return bookService.getAllBooks();
+    }
+
+    @GetMapping("/get/{id}")
+    public BookUnitResponseDto getBookById(@PathVariable(value = "id") Long bookId){
+        return bookService.getBookById(bookId);
     }
 
     @GetMapping("/get/review/{id}")
