@@ -1,4 +1,4 @@
-package com.example.LMS.builder;
+package com.example.LMS.builder.bookCopy;
 
 import com.example.LMS.dto.bookCopy.BookCopyCreateResponseDto;
 import com.example.LMS.entity.BookCopy;

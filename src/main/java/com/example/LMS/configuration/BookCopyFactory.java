@@ -1,6 +1,6 @@
 package com.example.LMS.configuration;
 
-import com.example.LMS.builder.BookCopyCreateResponseBuilder;
+import com.example.LMS.builder.bookCopy.BookCopyCreateResponseBuilder;
 import com.example.LMS.dto.bookCopy.BookCopyCreateResponseDto;
 import com.example.LMS.entity.Availability;
 import com.example.LMS.entity.Book;

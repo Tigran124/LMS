@@ -1,8 +1,7 @@
 package com.example.LMS.service;
 
-import com.example.LMS.builder.BookCopyResponseBuilder;
-import com.example.LMS.builder.ReviewCreateResponseBuilder;
-import com.example.LMS.dto.bookCopy.BookCopyOrderRequestDto;
+import com.example.LMS.builder.bookCopy.BookCopyResponseBuilder;
+import com.example.LMS.builder.review.ReviewCreateResponseBuilder;
 import com.example.LMS.dto.bookCopy.BookCopyResponseDto;
 import com.example.LMS.dto.review.ReviewCreateRequestDto;
 import com.example.LMS.dto.review.ReviewCreateResponseDto;
@@ -65,22 +64,20 @@ public class  UserService {
         }
     }
 
-    public BookCopyResponseDto orderBookCopy(BookCopyOrderRequestDto requestDto){
+    public BookCopyResponseDto orderBookCopy(Long bookCopyId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         Optional<User> optionalUser = userRepository.findByUsername(currentPrincipalName);
-        Optional<Book> optionalBook = bookRepository.findById(requestDto.getBookId());
-        Optional<BookCopy> optionalBookCopy = bookCopyRepository.findById(requestDto.getBookCopyId());
-        if (optionalUser.isEmpty() || optionalBook.isEmpty() || optionalBookCopy.isEmpty()){
+        Optional<BookCopy> optionalBookCopy = bookCopyRepository.findById(bookCopyId);
+        if (optionalUser.isEmpty() || optionalBookCopy.isEmpty()){
             throw new RuntimeException();
         }
         if (optionalBookCopy.get().getAvailability().equals(Availability.TAKEN)){
             throw new RuntimeException();
         }
-        bookCopyRepository.updateById(optionalUser.get(), requestDto.getBookCopyId());
         optionalBookCopy.get().setUser(optionalUser.get());
         optionalBookCopy.get().setAvailability(Availability.TAKEN);
-        BookCopy savedBookCopy = bookCopyRepository.getReferenceById(requestDto.getBookCopyId());
+        BookCopy savedBookCopy = bookCopyRepository.save(optionalBookCopy.get());
         return BookCopyResponseBuilder.buildBookCopyResponseDto(savedBookCopy);
     }
 }

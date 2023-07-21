@@ -1,4 +1,4 @@
-package com.example.LMS.builder;
+package com.example.LMS.builder.review;
 
 import com.example.LMS.dto.review.ReviewCreateResponseDto;
 import com.example.LMS.entity.Review;

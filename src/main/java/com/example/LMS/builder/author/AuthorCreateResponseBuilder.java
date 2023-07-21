@@ -1,4 +1,4 @@
-package com.example.LMS.builder;
+package com.example.LMS.builder.author;
 
 import com.example.LMS.dto.author.AuthorCreateResponseDto;
 import com.example.LMS.entity.Author;

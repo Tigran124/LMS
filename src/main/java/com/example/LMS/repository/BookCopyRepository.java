@@ -10,7 +10,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookCopyRepository extends JpaRepository<BookCopy, Long> {
 
-    @Modifying
-    @Query("update BookCopy b set b.user = ?1 where b.id = ?2")
-    void updateById(User user, Long id);
 }
