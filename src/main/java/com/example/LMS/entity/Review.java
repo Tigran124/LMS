@@ -2,7 +2,9 @@ package com.example.LMS.entity;
 
 import jakarta.persistence.*;
 
-@Entity
+@Entity(name = "review")
+@Table(uniqueConstraints = @UniqueConstraint(name = "UniqueUserAndBook",
+        columnNames = {"user_id", "book_id"}))
 public class Review {
 
     @Id

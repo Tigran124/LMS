@@ -10,6 +10,10 @@ import com.example.LMS.repository.BookCopyRepository;
 import com.example.LMS.repository.BookRepository;
 import com.example.LMS.repository.ReviewRepository;
 import com.example.LMS.repository.UserRepository;
+import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -42,24 +46,21 @@ public class  UserService {
             throw new RuntimeException();
         }
         User user = optionalUser.get();
-        if (user.getReviewMap().containsKey(requestDto.getBookId())){
-            Long reviewId = user.getReviewMap().
-                    get(requestDto.getBookId()).getId();
-            reviewRepository.updateById(
-                    requestDto.getComment(),
-                    requestDto.getRate(),
-                    reviewId);
-            Review savedReview = reviewRepository.getReferenceById(reviewId);
-            user.addReview(requestDto.getBookId(), savedReview);
-            return ReviewCreateResponseBuilder.buildReviewCreateResponseDto(savedReview);
-        }else {
+        Review review1 = reviewRepository.findByUserAndBookId(user, optionalBook.get());
+        String comm = review1.getComment();
+        try {
             Review review = new Review();
             review.setUser(user);
             review.setBook(optionalBook.get());
             review.setComment(requestDto.getComment());
             review.setRate(requestDto.getRate());
             Review savedReview = reviewRepository.save(review);
-            user.addReview(optionalBook.get().getId(), savedReview);
+            return ReviewCreateResponseBuilder.buildReviewCreateResponseDto(savedReview);
+        }catch (DataIntegrityViolationException e){
+            Review review = reviewRepository.findByUserAndBookId(user, optionalBook.get());
+            review.setRate(requestDto.getRate());
+            review.setComment(requestDto.getComment());
+            Review savedReview = reviewRepository.save(review);
             return ReviewCreateResponseBuilder.buildReviewCreateResponseDto(savedReview);
         }
     }

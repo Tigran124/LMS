@@ -29,9 +29,13 @@ public class User implements UserDetails {
     @OneToMany
     @Column(name = "fav_book_list")
     private List<Book> favBook;
+//    @OneToMany
+//    @Column(name = "review_map")
+//    private Map<Long, Review> reviewMap;
+
     @OneToMany
-    @Column(name = "review_map")
-    private Map<Long, Review> reviewMap;
+    @Column(name = "review_list")
+    private List<Review> reviewList;
 
     public void addBookCopy(BookCopy bookCopy){
         this.orderedBook.add(bookCopy);
@@ -41,16 +45,24 @@ public class User implements UserDetails {
         this.favBook.add(book);
     }
 
-    public void addReview(Long key, Review review){
-        this.reviewMap.put(key, review);
+    public void addReview(Review review){
+        this.reviewList.add(review);
     }
 
-    public Map<Long, Review> getReviewMap() {
-        return reviewMap;
+    public List<Review> getReviewList() {
+        return reviewList;
     }
 
-    public void setReviewMap(Map<Long, Review> reviewMap) {
-        this.reviewMap = reviewMap;
+    public void setReviewList(List<Review> reviewList) {
+        this.reviewList = reviewList;
+    }
+
+    public List<BookCopy> getOrderedBook() {
+        return orderedBook;
+    }
+
+    public void setOrderedBook(List<BookCopy> orderedBook) {
+        this.orderedBook = orderedBook;
     }
 
     public List<Book> getFavBook() {
