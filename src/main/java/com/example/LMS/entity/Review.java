@@ -5,16 +5,16 @@ import jakarta.persistence.*;
 @Entity(name = "review")
 @Table(uniqueConstraints = @UniqueConstraint(name = "UniqueUserAndBook",
         columnNames = {"user_id", "book_id"}))
+@IdClass(ReviewId.class)
 public class Review {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
     private Double rate;
     private String comment;
+    @Id
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+    @Id
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
@@ -26,14 +26,6 @@ public class Review {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public Double getRate() {

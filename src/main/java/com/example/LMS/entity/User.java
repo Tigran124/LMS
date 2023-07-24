@@ -29,9 +29,6 @@ public class User implements UserDetails {
     @OneToMany
     @Column(name = "fav_book_list")
     private List<Book> favBook;
-//    @OneToMany
-//    @Column(name = "review_map")
-//    private Map<Long, Review> reviewMap;
 
     @OneToMany
     @Column(name = "review_list")
