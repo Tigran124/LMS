@@ -12,7 +12,6 @@ import com.example.LMS.repository.BookCopyRepository;
 import com.example.LMS.repository.BookRepository;
 import com.example.LMS.repository.ReviewRepository;
 import com.example.LMS.repository.UserRepository;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -69,9 +68,9 @@ public class  UserService {
         if (optionalUser.isEmpty() || optionalBook.isEmpty()){
             throw new RuntimeException();
         }
-        User user = optionalUser.get();
-        Book book = optionalBook.get();
-        Optional<Review> optionalReview = reviewRepository.findByUserAndBookId(user, book);
+        Optional<Review> optionalReview = reviewRepository.findByUserAndBookId(
+                optionalUser.get(),
+                optionalBook.get());
         if (optionalReview.isEmpty()){
             throw new RuntimeException();
         }
