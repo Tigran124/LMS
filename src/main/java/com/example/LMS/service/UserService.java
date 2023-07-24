@@ -2,9 +2,11 @@ package com.example.LMS.service;
 
 import com.example.LMS.builder.bookCopy.BookCopyResponseBuilder;
 import com.example.LMS.builder.review.ReviewCreateResponseBuilder;
+import com.example.LMS.builder.review.ReviewResponseBuilder;
 import com.example.LMS.dto.bookCopy.BookCopyResponseDto;
 import com.example.LMS.dto.review.ReviewCreateRequestDto;
 import com.example.LMS.dto.review.ReviewCreateResponseDto;
+import com.example.LMS.dto.review.ReviewResponseDto;
 import com.example.LMS.entity.*;
 import com.example.LMS.repository.BookCopyRepository;
 import com.example.LMS.repository.BookRepository;
@@ -35,19 +37,18 @@ public class  UserService {
     }
 
     public ReviewCreateResponseDto createReview(ReviewCreateRequestDto requestDto){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        Optional<User> optionalUser = userRepository.findByUsername(currentPrincipalName);
+        Optional<User> optionalUser = getOptionalUser();
         Optional<Book> optionalBook = bookRepository.findById(requestDto.getBookId());
         if (optionalUser.isEmpty() || optionalBook.isEmpty()){
             throw new RuntimeException();
         }
         User user = optionalUser.get();
-        Optional<Review> optionalReview = reviewRepository.findByUserAndBookId(user, optionalBook.get());
+        Book book = optionalBook.get();
+        Optional<Review> optionalReview = reviewRepository.findByUserAndBookId(user, book);
         if (optionalReview.isEmpty()){
             Review review = new Review();
             review.setUser(user);
-            review.setBook(optionalBook.get());
+            review.setBook(book);
             review.setComment(requestDto.getComment());
             review.setRate(requestDto.getRate());
             Review savedReview = reviewRepository.save(review);
@@ -60,6 +61,21 @@ public class  UserService {
             Review savedReview = reviewRepository.save(review);
             return ReviewCreateResponseBuilder.buildReviewCreateResponseDto(savedReview);
         }
+    }
+
+    public ReviewResponseDto getReviewByBookId(Long bookId){
+        Optional<User> optionalUser = getOptionalUser();
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        if (optionalUser.isEmpty() || optionalBook.isEmpty()){
+            throw new RuntimeException();
+        }
+        User user = optionalUser.get();
+        Book book = optionalBook.get();
+        Optional<Review> optionalReview = reviewRepository.findByUserAndBookId(user, book);
+        if (optionalReview.isEmpty()){
+            throw new RuntimeException();
+        }
+        return ReviewResponseBuilder.buildReviewResponseDto(optionalReview.get());
     }
 
     public BookCopyResponseDto orderBookCopy(Long bookCopyId){
@@ -77,5 +93,11 @@ public class  UserService {
         optionalBookCopy.get().setAvailability(Availability.TAKEN);
         BookCopy savedBookCopy = bookCopyRepository.save(optionalBookCopy.get());
         return BookCopyResponseBuilder.buildBookCopyResponseDto(savedBookCopy);
+    }
+
+    private Optional<User> getOptionalUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        return userRepository.findByUsername(currentPrincipalName);
     }
 }

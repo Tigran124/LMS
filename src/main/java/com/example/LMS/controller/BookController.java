@@ -39,8 +39,8 @@ public class BookController {
     }
 
     @GetMapping("/get/review/{id}")
-    public List<ReviewResponseDto> getReviewByBookId(@PathVariable(value = "id") Long bookId){
-        return bookService.getReviewByBookId(bookId);
+    public List<ReviewResponseDto> getReviewListByBookId(@PathVariable(value = "id") Long bookId){
+        return bookService.getReviewListByBookId(bookId);
     }
 
     @GetMapping("/get/bookCopy/{id}")

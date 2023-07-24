@@ -4,7 +4,6 @@ import com.example.LMS.entity.Book;
 import com.example.LMS.entity.Review;
 import com.example.LMS.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;

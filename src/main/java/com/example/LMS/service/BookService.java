@@ -81,7 +81,7 @@ public class BookService {
         return responseDto;
     }
 
-    public List<ReviewResponseDto> getReviewByBookId(Long bookId){
+    public List<ReviewResponseDto> getReviewListByBookId(Long bookId){
         Optional<Book> optionalBook = bookRepository.findById(bookId);
         if (optionalBook.isEmpty()){
             throw new RuntimeException();
