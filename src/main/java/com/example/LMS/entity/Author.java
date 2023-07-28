@@ -11,7 +11,7 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String authorName;
-    @OneToMany
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
     @Column(name = "written_book_list")
     private List<Book> bookList;
 

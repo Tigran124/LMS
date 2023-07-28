@@ -51,7 +51,6 @@ public class  UserService {
             review.setComment(requestDto.getComment());
             review.setRate(requestDto.getRate());
             Review savedReview = reviewRepository.save(review);
-            user.addReview(savedReview);
             return ReviewCreateResponseBuilder.buildReviewCreateResponseDto(savedReview);
         }else {
             Review review = optionalReview.get();

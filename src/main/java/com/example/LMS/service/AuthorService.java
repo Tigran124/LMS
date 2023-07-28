@@ -63,4 +63,13 @@ public class AuthorService {
         );
         return responseDto;
     }
+
+    public Boolean deleteAuthorById(Long id){
+        Optional<Author> optionalAuthor = authorRepository.findById(id);
+        if (optionalAuthor.isEmpty()){
+            return false;
+        }
+        authorRepository.deleteById(id);
+        return true;
+    }
 }

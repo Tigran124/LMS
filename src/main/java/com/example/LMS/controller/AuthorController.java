@@ -35,4 +35,9 @@ public class AuthorController {
     public AuthorUnitResponseDto getAuthorById(@PathVariable(value = "id") Long id){
         return authorService.getAuthorById(id);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public Boolean deleteAuthorById(@PathVariable(value = "id") Long id){
+        return authorService.deleteAuthorById(id);
+    }
 }

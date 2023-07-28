@@ -16,10 +16,10 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     private Author author;
-    @OneToMany
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     @Column(name = "review_list")
     private List<Review> reviewList;
-    @OneToMany
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     @Column(name = "book_copy")
     private List<BookCopy> bookCopyList;
 

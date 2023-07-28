@@ -29,7 +29,7 @@ public class User implements UserDetails {
     @Column(name = "fav_book_list")
     private List<Book> favBook;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @Column(name = "review_list")
     private List<Review> reviewList;
 
