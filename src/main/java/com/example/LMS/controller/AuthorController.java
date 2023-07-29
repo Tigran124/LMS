@@ -37,7 +37,8 @@ public class AuthorController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public Boolean deleteAuthorById(@PathVariable(value = "id") Long id){
-        return authorService.deleteAuthorById(id);
+    @Secured("ADMIN")
+    public void deleteAuthorById(@PathVariable(value = "id") Long id){
+        authorService.deleteAuthorById(id);
     }
 }

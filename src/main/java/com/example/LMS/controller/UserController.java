@@ -31,4 +31,9 @@ public class UserController {
     public BookCopyResponseDto orderBookCopy(@PathVariable(value = "id") Long bookCopyId){
         return userService.orderBookCopy(bookCopyId);
     }
+
+    @DeleteMapping("/review/delete/{id}")
+    public void deleteReviewByBookId(@PathVariable(value = "id") Long bookId){
+        userService.deleteReviewByBookId(bookId);
+    }
 }

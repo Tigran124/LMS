@@ -4,6 +4,7 @@ import com.example.LMS.configuration.BookCopyFactory;
 import com.example.LMS.dto.bookCopy.BookCopyCreateRequestDto;
 import com.example.LMS.dto.bookCopy.BookCopyCreateResponseDto;
 import com.example.LMS.entity.Book;
+import com.example.LMS.exception.ResourceNotFoundException;
 import com.example.LMS.repository.BookCopyRepository;
 import com.example.LMS.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -27,10 +28,15 @@ public class BookCopyService {
     }
 
     public List<BookCopyCreateResponseDto> createBookCopy(BookCopyCreateRequestDto requestDto){
-        Optional<Book> optionalBook = bookRepository.findById(requestDto.getBookId());
+        Book book = getBook(requestDto.getBookId());
+        return bookCopyFactory.createBookCopy(requestDto.getAmount(), book);
+    }
+
+    private Book getBook(Long bookId){
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
         if (optionalBook.isEmpty()){
-            throw new  RuntimeException();
+            throw new ResourceNotFoundException("Book not found");
         }
-        return bookCopyFactory.createBookCopy(requestDto.getAmount(), optionalBook.get());
+        return optionalBook.get();
     }
 }

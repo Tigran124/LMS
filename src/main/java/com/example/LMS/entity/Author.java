@@ -10,6 +10,7 @@ public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String authorName;
     @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
     @Column(name = "written_book_list")

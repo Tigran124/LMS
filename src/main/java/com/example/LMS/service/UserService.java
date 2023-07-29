@@ -8,6 +8,9 @@ import com.example.LMS.dto.review.ReviewCreateRequestDto;
 import com.example.LMS.dto.review.ReviewCreateResponseDto;
 import com.example.LMS.dto.review.ReviewResponseDto;
 import com.example.LMS.entity.*;
+import com.example.LMS.exception.NoContentToDeleteException;
+import com.example.LMS.exception.ResourceNotFoundException;
+import com.example.LMS.exception.ValidationException;
 import com.example.LMS.repository.BookCopyRepository;
 import com.example.LMS.repository.BookRepository;
 import com.example.LMS.repository.ReviewRepository;
@@ -36,13 +39,8 @@ public class  UserService {
     }
 
     public ReviewCreateResponseDto createReview(ReviewCreateRequestDto requestDto){
-        Optional<User> optionalUser = getOptionalUser();
-        Optional<Book> optionalBook = bookRepository.findById(requestDto.getBookId());
-        if (optionalUser.isEmpty() || optionalBook.isEmpty()){
-            throw new RuntimeException();
-        }
-        User user = optionalUser.get();
-        Book book = optionalBook.get();
+        User user = getUser();
+        Book book = getBook(requestDto.getBookId());
         Optional<Review> optionalReview = reviewRepository.findByUserAndBookId(user, book);
         if (optionalReview.isEmpty()){
             Review review = new Review();
@@ -62,40 +60,65 @@ public class  UserService {
     }
 
     public ReviewResponseDto getReviewByBookId(Long bookId){
-        Optional<User> optionalUser = getOptionalUser();
-        Optional<Book> optionalBook = bookRepository.findById(bookId);
-        if (optionalUser.isEmpty() || optionalBook.isEmpty()){
-            throw new RuntimeException();
-        }
-        Optional<Review> optionalReview = reviewRepository.findByUserAndBookId(
-                optionalUser.get(),
-                optionalBook.get());
-        if (optionalReview.isEmpty()){
-            throw new RuntimeException();
-        }
-        return ReviewResponseBuilder.buildReviewResponseDto(optionalReview.get());
+        User user = getUser();
+        Book book = getBook(bookId);
+        Review review = getReview(user, book);
+        return ReviewResponseBuilder.buildReviewResponseDto(review);
     }
 
     public BookCopyResponseDto orderBookCopy(Long bookCopyId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        Optional<User> optionalUser = userRepository.findByUsername(currentPrincipalName);
-        Optional<BookCopy> optionalBookCopy = bookCopyRepository.findById(bookCopyId);
-        if (optionalUser.isEmpty() || optionalBookCopy.isEmpty()){
-            throw new RuntimeException();
+        User user = getUser();
+        BookCopy bookCopy = getBookCopy(bookCopyId);
+        if (bookCopy.getAvailability().equals(Availability.TAKEN)){
+            throw new ValidationException("BookCopy is already taken");
         }
-        if (optionalBookCopy.get().getAvailability().equals(Availability.TAKEN)){
-            throw new RuntimeException();
-        }
-        optionalBookCopy.get().setUser(optionalUser.get());
-        optionalBookCopy.get().setAvailability(Availability.TAKEN);
-        BookCopy savedBookCopy = bookCopyRepository.save(optionalBookCopy.get());
+        bookCopy.setUser(user);
+        bookCopy.setAvailability(Availability.TAKEN);
+        BookCopy savedBookCopy = bookCopyRepository.save(bookCopy);
         return BookCopyResponseBuilder.buildBookCopyResponseDto(savedBookCopy);
     }
 
-    private Optional<User> getOptionalUser(){
+    public void deleteReviewByBookId(Long bookId){
+        User user = getUser();
+        Book book = getBook(bookId);
+        Optional<Review> optionalReview = reviewRepository.findByUserAndBookId(user, book);
+        if (optionalReview.isEmpty()){
+            throw new NoContentToDeleteException("Review not found to delete");
+        }
+        reviewRepository.delete(optionalReview.get());
+    }
+
+    private User getUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        return userRepository.findByUsername(currentPrincipalName);
+        Optional<User> optionalUser = userRepository.findByUsername(currentPrincipalName);
+        if (optionalUser.isEmpty()){
+            throw new ResourceNotFoundException("User not found");
+        }
+        return optionalUser.get();
+    }
+
+    private Book getBook(Long bookId){
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        if (optionalBook.isEmpty()){
+            throw new ResourceNotFoundException("Book not found");
+        }
+        return optionalBook.get();
+    }
+
+    private Review getReview(User user, Book book){
+        Optional<Review> optionalReview = reviewRepository.findByUserAndBookId(user, book);
+        if (optionalReview.isEmpty()){
+            throw new ResourceNotFoundException("Review not found");
+        }
+        return optionalReview.get();
+    }
+
+    private BookCopy getBookCopy(Long bookCopyId){
+        Optional<BookCopy> optionalBookCopy = bookCopyRepository.findById(bookCopyId);
+        if (optionalBookCopy.isEmpty()){
+            throw new ResourceNotFoundException("BookCopy not found");
+        }
+        return optionalBookCopy.get();
     }
 }

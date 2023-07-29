@@ -9,6 +9,8 @@ import com.example.LMS.dto.author.AuthorResponseDto;
 import com.example.LMS.dto.author.AuthorUnitResponseDto;
 import com.example.LMS.entity.Author;
 import com.example.LMS.entity.Book;
+import com.example.LMS.exception.NoContentToDeleteException;
+import com.example.LMS.exception.ResourceNotFoundException;
 import com.example.LMS.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,16 +48,12 @@ public class AuthorService {
     }
 
     public AuthorUnitResponseDto getAuthorById(Long id){
-        Optional<Author> author = authorRepository.findById(id);
-        if (author.isEmpty()){
-            throw new RuntimeException();
-        }
+        Author author = getAuthor(id);
         AuthorUnitResponseDto responseDto = new AuthorUnitResponseDto();
         responseDto.setId(id);
-        responseDto.setAuthorName(author.get().getAuthorName());
+        responseDto.setAuthorName(author.getAuthorName());
         responseDto.setBookResponseDtoList(
-                author.get()
-                        .getBookList()
+                author.getBookList()
                         .stream()
                         .map((Book book) -> BookResponseBuilder.buildBookResponseDto(book, bookService
                                 .calculateRate(book)))
@@ -64,12 +62,19 @@ public class AuthorService {
         return responseDto;
     }
 
-    public Boolean deleteAuthorById(Long id){
+    public void deleteAuthorById(Long id){
         Optional<Author> optionalAuthor = authorRepository.findById(id);
         if (optionalAuthor.isEmpty()){
-            return false;
+            throw new NoContentToDeleteException("Author not found to delete");
         }
         authorRepository.deleteById(id);
-        return true;
+    }
+
+    private Author getAuthor(Long authorId){
+        Optional<Author> optionalAuthor = authorRepository.findById(authorId);
+        if (optionalAuthor.isEmpty()){
+            throw new ResourceNotFoundException("Author not found");
+        }
+        return optionalAuthor.get();
     }
 }

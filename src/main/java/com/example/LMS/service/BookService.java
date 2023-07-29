@@ -13,6 +13,7 @@ import com.example.LMS.dto.review.ReviewResponseDto;
 import com.example.LMS.entity.Author;
 import com.example.LMS.entity.Book;
 import com.example.LMS.entity.Review;
+import com.example.LMS.exception.ResourceNotFoundException;
 import com.example.LMS.repository.AuthorRepository;
 import com.example.LMS.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -37,13 +38,10 @@ public class BookService {
     }
 
     public BookCreateResponseDto createBook(BookCreateRequestDto requestDto){
-        Optional<Author> author = authorRepository.findById(requestDto.getAuthorId());
-        if (author.isEmpty()){
-            throw new RuntimeException();
-        }
+        Author author = getAuthor(requestDto.getAuthorId());
         Book book = new Book();
         book.setBookName(requestDto.getBookName());
-        book.setAuthor(author.get());
+        book.setAuthor(author);
         book.setReviewList(new ArrayList<>());
         book.setBookCopyList(new ArrayList<>());
         Book savedBook = bookRepository.save(book);
@@ -59,21 +57,18 @@ public class BookService {
     }
 
     public BookUnitResponseDto getBookById(Long bookId){
-        Optional<Book> optionalBook = bookRepository.findById(bookId);
-        if (optionalBook.isEmpty()){
-            throw new RuntimeException();
-        }
+        Book book = getBook(bookId);
         BookUnitResponseDto responseDto = new BookUnitResponseDto();
-        responseDto.setBookName(optionalBook.get().getBookName());
-        responseDto.setAuthorName(optionalBook.get().getAuthor().getAuthorName());
-        responseDto.setAuthorId(optionalBook.get().getAuthor().getId());
-        OptionalDouble rate = calculateRate(optionalBook.get());
+        responseDto.setBookName(book.getBookName());
+        responseDto.setAuthorName(book.getAuthor().getAuthorName());
+        responseDto.setAuthorId(book.getAuthor().getId());
+        OptionalDouble rate = calculateRate(book);
         if (rate.isPresent()){
             responseDto.setRate(rate.getAsDouble());
         }else {
             responseDto.setRate(null);
         }
-        responseDto.setReviewList(optionalBook.get()
+        responseDto.setReviewList(book
                 .getReviewList()
                 .stream()
                 .map(ReviewResponseBuilder::buildReviewResponseDto)
@@ -82,11 +77,8 @@ public class BookService {
     }
 
     public List<ReviewResponseDto> getReviewListByBookId(Long bookId){
-        Optional<Book> optionalBook = bookRepository.findById(bookId);
-        if (optionalBook.isEmpty()){
-            throw new RuntimeException();
-        }
-        return optionalBook.get()
+        Book book = getBook(bookId);
+        return book
                 .getReviewList()
                 .stream()
                 .map(ReviewResponseBuilder::buildReviewResponseDto)
@@ -94,11 +86,8 @@ public class BookService {
     }
 
     public List<BookCopyResponseDto> getBookCopyByBookId(Long bookId){
-        Optional<Book> optionalBook = bookRepository.findById(bookId);
-        if (optionalBook.isEmpty()){
-            throw new RuntimeException();
-        }
-        return optionalBook.get()
+        Book book = getBook(bookId);
+        return book
                 .getBookCopyList()
                 .stream()
                 .map(BookCopyResponseBuilder::buildBookCopyResponseDto)
@@ -109,5 +98,21 @@ public class BookService {
         return book.getReviewList().stream()
                 .mapToDouble(Review::getRate)
                 .average();
+    }
+
+    private Author getAuthor(Long authorId){
+        Optional<Author> optionalAuthor = authorRepository.findById(authorId);
+        if (optionalAuthor.isEmpty()){
+            throw new ResourceNotFoundException("Author not found");
+        }
+        return optionalAuthor.get();
+    }
+
+    private Book getBook(Long bookId){
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        if (optionalBook.isEmpty()){
+            throw new ResourceNotFoundException("Book not found");
+        }
+        return optionalBook.get();
     }
 }
