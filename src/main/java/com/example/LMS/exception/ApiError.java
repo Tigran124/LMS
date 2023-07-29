@@ -3,9 +3,9 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
 
+@Getter
 public class ApiError {
 
-    @Getter
     private HttpStatus httpStatus;
     private String message;
     private LocalDateTime localDateTime;
