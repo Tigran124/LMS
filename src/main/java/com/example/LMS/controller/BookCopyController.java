@@ -22,7 +22,7 @@ public class BookCopyController {
     }
 
     @Secured("ADMIN")
-    @PostMapping("/create")
+    @PostMapping
     public List<BookCopyCreateResponseDto> createBookCopy(@RequestBody BookCopyCreateRequestDto requestDto){
         return bookCopyService.createBookCopy(requestDto);
     }

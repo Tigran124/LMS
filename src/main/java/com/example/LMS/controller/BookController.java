@@ -22,28 +22,28 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     @Secured("ADMIN")
     public BookCreateResponseDto createBook(@RequestBody BookCreateRequestDto requestDto){
         return bookService.createBook(requestDto);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/all")
     public List<BookResponseDto> getAllBooks(){
         return bookService.getAllBooks();
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public BookUnitResponseDto getBookById(@PathVariable(value = "id") Long bookId){
         return bookService.getBookById(bookId);
     }
 
-    @GetMapping("/get/review/{id}")
+    @GetMapping("/review/{id}")
     public List<ReviewResponseDto> getReviewListByBookId(@PathVariable(value = "id") Long bookId){
         return bookService.getReviewListByBookId(bookId);
     }
 
-    @GetMapping("/get/bookCopy/{id}")
+    @GetMapping("/bookCopy/{id}")
     public List<BookCopyResponseDto> getBookCopyByBookId(@PathVariable(value = "id") Long bookId){
         return bookService.getBookCopyByBookId(bookId);
     }

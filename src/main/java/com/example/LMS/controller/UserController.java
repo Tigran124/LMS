@@ -17,22 +17,22 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/review/create")
+    @PostMapping("/review")
     public ReviewCreateResponseDto createReview(@RequestBody ReviewCreateRequestDto requestDto){
         return userService.createReview(requestDto);
     }
 
-    @GetMapping("/review/get/{id}")
+    @GetMapping("/review/{id}")
     public ReviewResponseDto getReviewByBookId(@PathVariable(value = "id") Long bookId){
         return userService.getReviewByBookId(bookId);
     }
 
-    @PutMapping("/bookCopy/put/{id}")
+    @PutMapping("/bookCopy/{id}")
     public BookCopyResponseDto orderBookCopy(@PathVariable(value = "id") Long bookCopyId){
         return userService.orderBookCopy(bookCopyId);
     }
 
-    @DeleteMapping("/review/delete/{id}")
+    @DeleteMapping("/review/{id}")
     public void deleteReviewByBookId(@PathVariable(value = "id") Long bookId){
         userService.deleteReviewByBookId(bookId);
     }

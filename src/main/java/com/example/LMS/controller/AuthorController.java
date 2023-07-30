@@ -20,23 +20,23 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     @Secured("ADMIN")
     public AuthorCreateResponseDto createAuthor(@RequestBody AuthorCreateRequestDto requestDto) {
         return authorService.createAuthor(requestDto);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/all")
     public List<AuthorResponseDto> getAllAuthors(){
         return authorService.getAllAuthors();
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public AuthorUnitResponseDto getAuthorById(@PathVariable(value = "id") Long id){
         return authorService.getAuthorById(id);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @Secured("ADMIN")
     public void deleteAuthorById(@PathVariable(value = "id") Long id){
         authorService.deleteAuthorById(id);
