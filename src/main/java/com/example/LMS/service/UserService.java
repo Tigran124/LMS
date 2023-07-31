@@ -81,7 +81,6 @@ public class  UserService {
     }
 
     public BookCopyReturnResponseDto returnBookCopy(Long bookCopyId){
-        User user = getUser();
         BookCopy bookCopy = getBookCopy(bookCopyId);
         if (bookCopy.getAvailability().equals(Availability.AVAILABLE)){
             throw new ResourceNotFoundException("Wrong bookCopy Id");
