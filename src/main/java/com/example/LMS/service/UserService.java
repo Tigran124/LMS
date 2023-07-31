@@ -1,9 +1,11 @@
 package com.example.LMS.service;
 
 import com.example.LMS.builder.bookCopy.BookCopyResponseBuilder;
+import com.example.LMS.builder.bookCopy.BookCopyReturnResponseBuilder;
 import com.example.LMS.builder.review.ReviewCreateResponseBuilder;
 import com.example.LMS.builder.review.ReviewResponseBuilder;
 import com.example.LMS.dto.bookCopy.BookCopyResponseDto;
+import com.example.LMS.dto.bookCopy.BookCopyReturnResponseDto;
 import com.example.LMS.dto.review.ReviewCreateRequestDto;
 import com.example.LMS.dto.review.ReviewCreateResponseDto;
 import com.example.LMS.dto.review.ReviewResponseDto;
@@ -76,6 +78,26 @@ public class  UserService {
         bookCopy.setAvailability(Availability.TAKEN);
         BookCopy savedBookCopy = bookCopyRepository.save(bookCopy);
         return BookCopyResponseBuilder.buildBookCopyResponseDto(savedBookCopy);
+    }
+
+    public BookCopyReturnResponseDto returnBookCopy(Long bookCopyId){
+        User user = getUser();
+        BookCopy bookCopy = getBookCopy(bookCopyId);
+        if (bookCopy.getAvailability().equals(Availability.AVAILABLE)){
+            throw new ResourceNotFoundException("Wrong bookCopy Id");
+        }
+        bookCopy.setAvailability(Availability.AVAILABLE);
+        bookCopy.removeUser();
+        return BookCopyReturnResponseBuilder
+                .buildBookCopyReturnResponseDto(bookCopyRepository.save(bookCopy));
+    }
+
+    public void deleteUser(){
+        User user = getUser();
+        if (!user.getOrderedBook().isEmpty()){
+            throw new ValidationException("You have to return books to delete account");
+        }
+        userRepository.delete(user);
     }
 
     public void deleteReviewByBookId(Long bookId){

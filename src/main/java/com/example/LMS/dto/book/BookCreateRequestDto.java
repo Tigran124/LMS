@@ -1,22 +1,11 @@
 package com.example.LMS.dto.book;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class BookCreateRequestDto {
     private String bookName;
     private Long authorId;
-
-    public String getBookName() {
-        return bookName;
-    }
-
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
-    }
-
-    public Long getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
-    }
 }

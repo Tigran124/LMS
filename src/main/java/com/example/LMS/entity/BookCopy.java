@@ -17,6 +17,11 @@ public class BookCopy {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public void removeUser(){
+        user.getOrderedBook().remove(this);
+        this.user = null;
+    }
+
     public void setBook(Book book) {
         this.book = book;
         this.book.addBookCopy(this);

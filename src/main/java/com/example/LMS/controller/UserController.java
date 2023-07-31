@@ -1,6 +1,7 @@
 package com.example.LMS.controller;
 
 import com.example.LMS.dto.bookCopy.BookCopyResponseDto;
+import com.example.LMS.dto.bookCopy.BookCopyReturnResponseDto;
 import com.example.LMS.dto.review.ReviewCreateRequestDto;
 import com.example.LMS.dto.review.ReviewCreateResponseDto;
 import com.example.LMS.dto.review.ReviewResponseDto;
@@ -27,9 +28,19 @@ public class UserController {
         return userService.getReviewByBookId(bookId);
     }
 
-    @PutMapping("/bookCopy/{id}")
+    @PutMapping("/bookCopy/order/{id}")
     public BookCopyResponseDto orderBookCopy(@PathVariable(value = "id") Long bookCopyId){
         return userService.orderBookCopy(bookCopyId);
+    }
+
+    @PutMapping("/bookCopy/return/{id}")
+    public BookCopyReturnResponseDto returnBookCopy(@PathVariable(value = "id") Long bookCopyId){
+        return userService.returnBookCopy(bookCopyId);
+    }
+
+    @DeleteMapping
+    public void deleteUser(){
+        userService.deleteUser();
     }
 
     @DeleteMapping("/review/{id}")

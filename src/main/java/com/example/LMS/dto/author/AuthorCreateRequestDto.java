@@ -1,14 +1,11 @@
 package com.example.LMS.dto.author;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class AuthorCreateRequestDto {
 
     private String AuthorName;
-
-    public String getAuthorName() {
-        return AuthorName;
-    }
-
-    public void setAuthorName(String authorName) {
-        this.AuthorName = authorName;
-    }
 }

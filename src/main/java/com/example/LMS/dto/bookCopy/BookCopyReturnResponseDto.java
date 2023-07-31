@@ -6,10 +6,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BookCopyResponseDto {
+public class BookCopyReturnResponseDto {
 
     private Long id;
-    private Availability availability;
     private Long bookId;
-    private Long userId;
+    private Availability availability;
 }
