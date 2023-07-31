@@ -48,4 +48,9 @@ public class BookController {
         return bookService.getBookCopyByBookId(bookId);
     }
 
+    @DeleteMapping("/{id}")
+    @Secured("ADMIN")
+    public void deleteBook(@PathVariable(value = "id") Long bookId){
+        bookService.deleteBook(bookId);
+    }
 }

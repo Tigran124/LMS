@@ -13,6 +13,7 @@ import com.example.LMS.dto.review.ReviewResponseDto;
 import com.example.LMS.entity.Author;
 import com.example.LMS.entity.Book;
 import com.example.LMS.entity.Review;
+import com.example.LMS.exception.NoContentToDeleteException;
 import com.example.LMS.exception.ResourceNotFoundException;
 import com.example.LMS.repository.AuthorRepository;
 import com.example.LMS.repository.BookRepository;
@@ -92,6 +93,14 @@ public class BookService {
                 .stream()
                 .map(BookCopyResponseBuilder::buildBookCopyResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    public void deleteBook(Long bookId){
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        if (optionalBook.isEmpty()){
+            throw new NoContentToDeleteException("Book not found to delete");
+        }
+        bookRepository.delete(optionalBook.get());
     }
 
     public OptionalDouble calculateRate(Book book){
