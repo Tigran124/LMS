@@ -3,7 +3,6 @@ package com.example.LMS.controller;
 import com.example.LMS.dto.author.AuthorCreateRequestDto;
 import com.example.LMS.dto.author.AuthorCreateResponseDto;
 import com.example.LMS.dto.author.AuthorResponseDto;
-import com.example.LMS.dto.author.AuthorUnitResponseDto;
 import com.example.LMS.service.AuthorService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -27,18 +26,20 @@ public class AuthorController {
     }
 
     @GetMapping("/all")
-    public List<AuthorResponseDto> getAllAuthors(){
-        return authorService.getAllAuthors();
+    public List<AuthorResponseDto> getAllAuthors(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "5") Integer size) {
+        return authorService.getAllAuthors(page, size);
     }
 
     @GetMapping("/{id}")
-    public AuthorUnitResponseDto getAuthorById(@PathVariable(value = "id") Long id){
+    public AuthorResponseDto getAuthorById(@PathVariable(value = "id") Long id) {
         return authorService.getAuthorById(id);
     }
 
     @DeleteMapping("/{id}")
     @Secured("ADMIN")
-    public void deleteAuthorById(@PathVariable(value = "id") Long id){
+    public void deleteAuthorById(@PathVariable(value = "id") Long id) {
         authorService.deleteAuthorById(id);
     }
 }

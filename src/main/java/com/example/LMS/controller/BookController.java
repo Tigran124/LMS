@@ -3,7 +3,6 @@ package com.example.LMS.controller;
 import com.example.LMS.dto.book.BookCreateRequestDto;
 import com.example.LMS.dto.book.BookCreateResponseDto;
 import com.example.LMS.dto.book.BookResponseDto;
-import com.example.LMS.dto.book.BookUnitResponseDto;
 import com.example.LMS.dto.bookCopy.BookCopyResponseDto;
 import com.example.LMS.dto.review.ReviewResponseDto;
 import com.example.LMS.service.BookService;
@@ -24,33 +23,41 @@ public class BookController {
 
     @PostMapping
     @Secured("ADMIN")
-    public BookCreateResponseDto createBook(@RequestBody BookCreateRequestDto requestDto){
+    public BookCreateResponseDto createBook(@RequestBody BookCreateRequestDto requestDto) {
         return bookService.createBook(requestDto);
     }
 
     @GetMapping("/all")
-    public List<BookResponseDto> getAllBooks(){
-        return bookService.getAllBooks();
+    public List<BookResponseDto> getAllBooks(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "5") Integer size) {
+        return bookService.getAllBooks(page, size);
     }
 
     @GetMapping("/{id}")
-    public BookUnitResponseDto getBookById(@PathVariable(value = "id") Long bookId){
+    public BookResponseDto getBookById(@PathVariable(value = "id") Long bookId) {
         return bookService.getBookById(bookId);
     }
 
     @GetMapping("/review/{id}")
-    public List<ReviewResponseDto> getReviewListByBookId(@PathVariable(value = "id") Long bookId){
-        return bookService.getReviewListByBookId(bookId);
+    public List<ReviewResponseDto> getReviewListByBookId(
+            @PathVariable(value = "id") Long bookId,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "5") Integer size) {
+        return bookService.getReviewListByBookId(bookId, page, size);
     }
 
     @GetMapping("/bookCopy/{id}")
-    public List<BookCopyResponseDto> getBookCopyByBookId(@PathVariable(value = "id") Long bookId){
-        return bookService.getBookCopyByBookId(bookId);
+    public List<BookCopyResponseDto> getBookCopyByBookId(
+            @PathVariable(value = "id") Long bookId,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "5") Integer size) {
+        return bookService.getBookCopyByBookId(bookId, page, size);
     }
 
     @DeleteMapping("/{id}")
     @Secured("ADMIN")
-    public void deleteBook(@PathVariable(value = "id") Long bookId){
+    public void deleteBook(@PathVariable(value = "id") Long bookId) {
         bookService.deleteBook(bookId);
     }
 }
